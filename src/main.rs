@@ -7,7 +7,7 @@ fn main() {
     let cookie = match fs::read_to_string(cookie_path) {
         Ok(c) => c.trim().to_string(),
         Err(e) => {
-            println!("erro ao ler cookie: {}", e);
+            println!("Failed to read cookie: {}", e);
             return;
         }
     };
