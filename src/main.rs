@@ -16,7 +16,7 @@ fn main() {
 
     let client = reqwest::blocking::Client::new();
     let body = r#"{"jsonrpc":"1.0","id":"fee_check",
-                "method":"getblockchaininfo","params":[]}"#;
+                "method":"estimatesmartfee","params":[6]}"#;
 
     let resp = match client
         .post("http://127.0.0.1:8332/")
@@ -39,6 +39,15 @@ fn main() {
         }
     };
 
+    let feerate = match json["result"]["feerate"].as_f64() {
+        Some(f) => f,
+        None => {
+            println!("feerate is not a number");
+            return;
+        }
+    };
+
+    println!("feerate: {:.1}", feerate * 100_000.0);
     println!("blocks: {}", json["result"]["blocks"]);
-    println!("chain: {}", json["result"]["chain"]);
+    println!("errors: {}", json["result"]["errors"]);
 }
